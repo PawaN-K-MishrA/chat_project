@@ -20,12 +20,14 @@ else{
     const user=await User.create({
       email:req.body.email,
       password:new_pwd,
-      name:req.body.name
+      name:req.body.user,
+      
     })
     
-    let token=await jwtoken.sign({id:user._id},"THIS-IS-CHAT-APPLICATION");
-    console.log('tokenjson--->',token);
-    res.send(user);
+    // let token=await jwtoken.sign({id:user._id},"THIS-IS-CHAT-APPLICATION");
+    // console.log('tokenjson--->',token);
+    // let f=new Object(user)
+    res.status(200).send(user);
 
     let mailTransporter = nodemailer.createTransport({
       service: 'gmail',
@@ -63,17 +65,18 @@ exports.getAll=(req,res)=>{
 
    exports.loginUser = async (req,res)=>{
      try{
-      console.log('login--->',req.body)
+      console.log('login--->',req.body.email)
       if (!req.body.email || req.body.password){
           throw new Error('Email or Password Missing...');
         }
-      let user=await User.findOne({'email':req.body.email});
+      let user=await User.findOne({'email':req.body.email}).lean();
       if(!user || !(await bcrypt.compare(req.body.Password,user.password))){
         throw new Error('Unauthorized Access....');
       }
       const token = await jwtoken.sign({id:user._id},"THIS-IS-CHAT-APPLICATION");
-      console.log(token)
-      res.send(user);
+      console.log(token);
+
+      res.status(200).send(Object.assign(user,{'token':token}));
     }
     catch (err){
       res.send(err.message);
