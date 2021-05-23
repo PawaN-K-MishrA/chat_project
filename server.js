@@ -53,11 +53,17 @@ io.on('connection',(socket)=>{
 
     //Event called on sending message...
     socket.on('chatMessage',async function(data){
-        prev_message= await chatMessage.findOne({$and:[{'from':socket.id},{'to':data.reciver}]},'message').lean();
+        let result= await chatMessage.findOne({$and:[{'from':socket.id},{'to':data.reciver}]},{'message':1}).lean();
+        if (!result){
+            prev_message=result.message;
+        }
+        else{
+            prev_message=''
+        }
         socket.to(userConnected[data.reciver]).emit('message',data);
         if (!prev_message){
             prev_message=''
-            prev_message+=" "+data;
+            prev_message+=data;
         }
         else{
         prev_message+='\n'+data;

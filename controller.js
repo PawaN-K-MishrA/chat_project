@@ -7,7 +7,7 @@ const bcrypt=require('bcryptjs');
 
 exports.registerNewUser = async (req,res)=>{
   
-    if (!req.body.email || !req.body.Password || !req.body.name){
+    if (!req.body.email || !req.body.Password || !req.body.user){
         return res.status(400).send({message:"required field cannot be empty..."});
     }
 
@@ -33,7 +33,7 @@ else{
       service: 'gmail',
       auth: {
         user: 'new139352.34@gmail.com',
-        pass: 'Password@12'
+        pass: '***********'
         }
       });
 
