@@ -1,18 +1,16 @@
 const mongoose=require('./mongo');
 const mssgSchema=mongoose.Schema({
     from:{
-        type:String,
-        reuired:true,
-        trim:true
+        type:mongoose.Types.ObjectId,
+        reuired:true
     },
     to:{
-        type:String,
-        required:true,
-        trim:true
+        type:mongoose.Types.ObjectId,
+        required:true
     },
     message:{
         type:String,
-        required:true,
+        required:true
     },
     date:{
         type:String,
